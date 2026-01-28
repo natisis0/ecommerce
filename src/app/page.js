@@ -1,5 +1,5 @@
 import Image from "next/image";
-import bannerImg from "../../public/images/banner_mens.png";
+import bannerImg from "../../public/images/HeroImage.png";
 import { featuredProducts } from "../../data/featured";
 import Card from "../../components/Card";
 import Link from "next/link";
@@ -13,7 +13,7 @@ export default function Home() {
           alt="bannerImg"
           className="rounded-2xl h-100 w-full"
         />
-        <div className="absolute inset-0 flex items-center justify-center flex-col text-white bg-black/40">
+        <div className="absolute inset-0 flex items-center justify-center flex-col text-white ">
           <h1 className="text-6xl font-bold ">New Autumn Collection </h1>
           <h1 className="text-6xl font-bold mb-3">Arrives</h1>
           <p className="text-lg ">
