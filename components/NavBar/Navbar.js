@@ -185,7 +185,7 @@ const Navbar = () => {
             style={{ width: "auto", height: "auto" }}
           />
           {totalItems > 0 && (
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-sm">
+            <span className="absolute -top-2 -right-2 bg-blue-400 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-sm">
               {totalItems > 99 ? "99+" : totalItems}
             </span>
           )}
