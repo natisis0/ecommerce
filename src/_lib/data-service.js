@@ -1,15 +1,17 @@
-import { supabase } from "./supabase";
+import { createClient } from "./supabase-server";
 import { cache } from "react";
 
 // cache() deduplicates this call within a single server request
 // So if Men, Women, Kids pages all call this, Supabase is only hit once per request
 export const getAllProducts = cache(async function () {
+  const supabase = await createClient();
   const { data, error } = await supabase.from("products").select();
   if (error) console.log(error.message);
   return data;
 });
 
 export const getProductsByGender = cache(async function (gender) {
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("products")
     .select()
@@ -19,6 +21,7 @@ export const getProductsByGender = cache(async function (gender) {
 });
 
 export const getProductById = cache(async function (id) {
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("products")
     .select()
@@ -28,8 +31,8 @@ export const getProductById = cache(async function (id) {
   return data;
 });
 
-
 export const getCategoryCards = cache(async function () {
+  const supabase = await createClient();
   const genders = ["Men", "Women", "Kids"];
   const labels = {
     Men: "Men's Apparel",
@@ -52,3 +55,26 @@ export const getCategoryCards = cache(async function () {
 
   return results.filter(Boolean);
 });
+
+export const getProfile = cache(async function (userId) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", userId)
+    .single();
+  if (error) console.log(error.message);
+  return data;
+});
+
+export async function updateProfile(userId, updates) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("profiles")
+    .update(updates)
+    .eq("id", userId)
+    .select()
+    .single();
+  if (error) throw new Error(error.message);
+  return data;
+}

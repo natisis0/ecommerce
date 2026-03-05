@@ -1,9 +1,9 @@
-
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getProductById } from "@/_lib/data-service";
 import Breadcrumb from "../../../../components/Breadcrumb";
-import { ShoppingCart, ShieldCheck, Truck, Star } from "lucide-react";
+import { ShieldCheck, Truck, Star } from "lucide-react";
+import AddToCartButton from "../../../../components/AddToCartButton";
 
 export async function generateMetadata({ params }) {
   const resolvedParams = await params;
@@ -117,10 +117,7 @@ export default async function ProductPage({ params }) {
 
           {/* Action Buttons */}
           <div className="mt-12 flex flex-col sm:flex-row gap-4">
-            <button className="flex-[2] bg-gray-900 hover:bg-black text-white font-bold py-5 px-8 rounded-2xl transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:-translate-y-1 active:scale-[0.98]">
-              <ShoppingCart className="w-6 h-6" />
-              <span className="text-lg">Add to Cart</span>
-            </button>
+            <AddToCartButton product={product} variant="full" />
             <button className="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold py-5 px-8 rounded-2xl transition-all duration-300 hover:-translate-y-1 active:scale-[0.98] border border-blue-100">
               Buy Now
             </button>

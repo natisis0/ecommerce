@@ -1,8 +1,8 @@
-
 import Footers from "../../components/Footer";
 import Navbar from "../../components/NavBar/Navbar";
 import "./globals.css";
 import Providers from "./Providers";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata = {
   title: "Ecommerce",
@@ -17,6 +17,7 @@ export default function RootLayout({ children }) {
           <Navbar />
           {children}
           <Footers />
+          <Toaster />
         </Providers>
       </body>
     </html>
