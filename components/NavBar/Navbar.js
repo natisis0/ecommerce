@@ -26,6 +26,7 @@ const Navbar = () => {
   // Merge localStorage cart into DB and sync
   const mergeAndSyncCart = async (authUser) => {
     try {
+      dispatch(storeActions.setSyncing(true));
       // Get localStorage items
       const stored = localStorage.getItem("cart_items");
       const localItems = stored ? JSON.parse(stored) : [];

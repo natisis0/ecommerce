@@ -18,11 +18,11 @@ export default async function AccountPage() {
   const profile = await getProfile(user.id);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
-      <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">My Account</h1>
-        <AccountForm user={user} profile={profile} />
-      </div>
+    <div className="bg-white border border-gray-100 rounded-2xl p-6 md:p-8 shadow-sm">
+      <h1 className="text-2xl font-extrabold text-gray-900 mb-6">
+        Profile Details
+      </h1>
+      <AccountForm user={user} profile={profile} />
     </div>
   );
 }

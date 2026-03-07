@@ -1,6 +1,5 @@
 "use client";
 
-
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { storeActions } from "../../../store/CartStore";
@@ -19,13 +18,16 @@ import {
 import { toast } from "sonner";
 import { createClient } from "@/_lib/supabase-browser";
 
+
 const CartPage = () => {
   const cartItems = useSelector((state) => state.cart.items);
+  const cartInitialized = useSelector((state) => state.cart.initialized);
+  const cartSyncing = useSelector((state) => state.cart.syncing);
   const dispatch = useDispatch();
   const [user, setUser] = useState(null);
   const [loadingItem, setLoadingItem] = useState(null);
   const [mounted, setMounted] = useState(false);
-// eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -41,7 +43,7 @@ const CartPage = () => {
     getUser();
   }, []);
 
-  if (!mounted) {
+  if (!mounted || !cartInitialized || cartSyncing) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-gray-200 border-t-gray-900 rounded-full animate-spin"></div>

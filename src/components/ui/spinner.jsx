@@ -25,4 +25,10 @@ export function SpinnerCustom(){
   );
 }
 
-
+export function SpinnerCustomCart(){
+  return (
+    <div className="flex justify-center items-center gap-6">
+      <Spinner className= "size-24" />
+    </div>
+  );
+}

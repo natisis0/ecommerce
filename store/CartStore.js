@@ -26,6 +26,7 @@ const cartSlice = createSlice({
   initialState: {
     items: [],
     initialized: false,
+    syncing: false,
   },
   reducers: {
     // Initialize cart from localStorage (call once on mount)
@@ -39,6 +40,10 @@ const cartSlice = createSlice({
     setCart: (state, action) => {
       state.items = action.payload;
       state.initialized = true;
+      state.syncing = false;
+    },
+    setSyncing: (state, action) => {
+      state.syncing = action.payload;
     },
     addToCart: (state, action) => {
       const existingItem = state.items.find(

@@ -36,7 +36,8 @@ export async function middleware(request) {
 
   // Protect routes
   const isProtectedRoute =
-    request.nextUrl.pathname.startsWith("/account");
+    request.nextUrl.pathname.startsWith("/account") ||
+    request.nextUrl.pathname.startsWith("/checkout");
   if (isProtectedRoute && !user) {
     return NextResponse.redirect(new URL("/login", request.url));
   }

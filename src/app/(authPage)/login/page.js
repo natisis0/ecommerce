@@ -13,18 +13,17 @@ const LoginPage = () => {
   useEffect(() => {
     if (state?.success) {
       toast.success("Login successful!");
-      router.push("/");
+      window.location.href = "/";
+
     }
   }, [state, router]);
 
   const handleGoogleSignIn = async () => {
     try {
       await signInWithGoogle();
-      
     } catch (error) {
-        toast.error(error.message);
+      toast.error(error.message);
     }
-   
   };
 
   return (
