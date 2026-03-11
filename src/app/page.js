@@ -25,7 +25,7 @@ export default function Home() {
       </section>
 
       <section>
-        <h2 className="font-bold text-center mt-30 text-4xl mb-4">
+        <h2 className="font-bold text-center mt-12 md:mt-20 lg:mt-30 text-2xl md:text-3xl lg:text-4xl mb-4">
           Shop by Category
         </h2>
         <Suspense fallback={<SpinnerCustom />}>

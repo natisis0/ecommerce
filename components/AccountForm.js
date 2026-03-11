@@ -72,7 +72,7 @@ const AccountForm = ({ user, profile }) => {
         <div className="h-32 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500" />
 
         {/* Avatar & Info */}
-        <div className="px-8 pb-8">
+        <div className="px-4 sm:px-8 pb-6 sm:pb-8">
           <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 -mt-16">
             {/* Avatar */}
             <button
@@ -113,7 +113,7 @@ const AccountForm = ({ user, profile }) => {
 
       {/* Edit Form */}
       <form action={formAction}>
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-8">
           <h3 className="text-lg font-semibold text-gray-900 mb-6">
             Edit Profile
           </h3>
@@ -191,7 +191,7 @@ const AccountForm = ({ user, profile }) => {
       </form>
 
       {/* Sign Out */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-8">
         <h3 className="text-lg font-semibold text-gray-900 mb-2">Sign Out</h3>
         <p className="text-sm text-gray-500 mb-4">
           Sign out of your account on this device.

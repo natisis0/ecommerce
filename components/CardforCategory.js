@@ -8,10 +8,12 @@ const CardforCategory = ({ item }) => {
         <img
           src={item.image}
           alt={item.name}
-          className="w-100 rounded-4xl object-cover h-80"
+          className="w-full rounded-4xl object-cover h-48 sm:h-64 md:h-80"
         />
         <div className="absolute bottom-4 left-4">
-          <h4 className="font-bold text-2xl text-black">{item.name}</h4>
+          <h4 className="font-bold text-xl sm:text-2xl text-black">
+            {item.name}
+          </h4>
         </div>
       </div>
     </Link>

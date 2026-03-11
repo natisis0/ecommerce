@@ -37,10 +37,9 @@ const Footers = () => {
   };
 
   return (
-    <footer className="bg-gray-50 border-t border-gray-200 mt-30">
-      <div className="max-w-7xl mx-auto px-6 py-16">
+    <footer className="bg-gray-50 border-t border-gray-200 mt-12 md:mt-20 lg:mt-30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12">
-          
           <div className="lg:col-span-4">
             <div className="text-2xl font-bold text-gray-900 mb-6">
               NextGen<span className="text-blue-600">Store</span>
@@ -52,7 +51,7 @@ const Footers = () => {
           </div>
 
           {/* Links Sections */}
-          
+
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title} className="lg:col-span-2">
               <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-6">

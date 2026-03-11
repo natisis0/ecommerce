@@ -4,7 +4,7 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
-import { User } from "lucide-react";
+import { User, Menu, X } from "lucide-react";
 import { storeActions } from "../../store/CartStore";
 
 import icon from "../../public/images/icon.png";
@@ -16,6 +16,7 @@ import { createClient } from "@/_lib/supabase-browser";
 const Navbar = () => {
   const [user, setUser] = useState(null);
   const [profileAvatar, setProfileAvatar] = useState(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -140,7 +141,8 @@ const Navbar = () => {
     null;
 
   return (
-    <nav className="flex justify-between items-center p-3 shadow-sm shadow-gray-300 flex-wrap">
+    <nav className="relative flex justify-between items-center p-3 shadow-sm shadow-gray-300">
+      {/* Logo */}
       <Link href="/" className="flex items-center gap-2 text-center">
         <Image
           src={icon}
@@ -151,14 +153,18 @@ const Navbar = () => {
         />
         <h3 className="font-semibold text-semibold">NextGen</h3>
       </Link>
-      <ul className="flex items-center md:gap-6 flex-wrap gap-1">
+
+      {/* Desktop Nav Links */}
+      <ul className="hidden md:flex items-center gap-6">
         <NavLink Name="Men" url="/men" />
         <NavLink Name="Women" url="/women" />
         <NavLink Name="Kids" url="/kids" />
         <NavLink Name="All Products" url="/allproducts" />
       </ul>
-      <div className="flex p-2 items-center gap-3">
-        {/* Account Icon */}
+
+      {/* Desktop Right Icons + Mobile Hamburger */}
+      <div className="flex items-center gap-3">
+        {/* Account Icon (always visible) */}
         <Link
           href={user ? "/account" : "/login"}
           className="relative w-9 h-9 rounded-full overflow-hidden border-2 border-gray-200 hover:border-indigo-400 transition-colors flex items-center justify-center bg-gray-100"
@@ -176,7 +182,7 @@ const Navbar = () => {
           )}
         </Link>
 
-        {/* Cart */}
+        {/* Cart (always visible) */}
         <Link href="/cart" className="relative">
           <Image
             src={cart}
@@ -191,7 +197,44 @@ const Navbar = () => {
             </span>
           )}
         </Link>
+
+        {/* Hamburger Button (mobile only) */}
+        <button
+          onClick={() => setMobileOpen((prev) => !prev)}
+          className="md:hidden p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+          aria-label="Toggle menu"
+        >
+          {mobileOpen ? (
+            <X className="w-6 h-6 text-gray-700" />
+          ) : (
+            <Menu className="w-6 h-6 text-gray-700" />
+          )}
+        </button>
       </div>
+
+      {/* Mobile Drawer */}
+      {mobileOpen && (
+        <div className="absolute top-full left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 md:hidden animate-in slide-in-from-top-2 duration-200">
+          <ul className="flex flex-col p-4 gap-1">
+            {[
+              { name: "Men", url: "/men" },
+              { name: "Women", url: "/women" },
+              { name: "Kids", url: "/kids" },
+              { name: "All Products", url: "/allproducts" },
+            ].map((link) => (
+              <li key={link.url}>
+                <Link
+                  href={link.url}
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-4 py-3 rounded-xl text-gray-700 font-medium hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                >
+                  {link.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </nav>
   );
 };

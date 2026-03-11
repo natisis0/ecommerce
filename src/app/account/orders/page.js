@@ -45,7 +45,7 @@ export default async function OrdersPage() {
             >
               {/* Order Header */}
               <details className="group">
-                <summary className="bg-gray-50 px-6 py-4 border-b border-gray-100 flex flex-wrap items-center justify-between gap-4 cursor-pointer hover:bg-gray-100 transition-colors list-none">
+                <summary className="bg-gray-50 px-4 sm:px-6 py-4 border-b border-gray-100 grid grid-cols-2 sm:grid-cols-4 gap-4 cursor-pointer hover:bg-gray-100 transition-colors list-none">
                   <div>
                     <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
                       Order Placed
@@ -99,7 +99,7 @@ export default async function OrdersPage() {
                       />
                     </div>
                   </div>
-                  <div className="text-right flex items-center gap-4">
+                  <div className="text-left sm:text-right flex items-center gap-4 col-span-2 sm:col-span-1 sm:justify-end">
                     <div>
                       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
                         Order ID
