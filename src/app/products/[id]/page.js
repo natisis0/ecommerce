@@ -1,9 +1,12 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { getProductById } from "@/_lib/data-service";
 import Breadcrumb from "../../../../components/Breadcrumb";
 import { ShieldCheck, Truck, Star } from "lucide-react";
 import AddToCartButton from "../../../../components/AddToCartButton";
+import YouMayAlsoLike from "../../../../components/YouMayAlsoLike";
+import { SpinnerCustom } from "@/components/ui/spinner";
 
 export async function generateMetadata({ params }) {
   const resolvedParams = await params;
@@ -166,6 +169,11 @@ export default async function ProductPage({ params }) {
           </div>
         </div>
       </div>
+
+      {/* You May Also Like */}
+      <Suspense fallback={<SpinnerCustom />}>
+        <YouMayAlsoLike currentProductId={product.id} gender={product.gender} />
+      </Suspense>
     </div>
   );
 }

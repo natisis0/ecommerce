@@ -9,10 +9,11 @@ const Page = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <Breadcrumb />
-      <h1 className="text-3xl font-bold my-8">Kids&apos; Collection</h1>
-      <Suspense fallback={<SpinnerCustom />}>
-        <GenderProducts gender="Kids" />
-      </Suspense>
+      <div className="mt-8">
+        <Suspense fallback={<SpinnerCustom />}>
+          <GenderProducts gender="Kids" title="Kids' Collection" />
+        </Suspense>
+      </div>
     </div>
   );
 };

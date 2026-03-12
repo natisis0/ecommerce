@@ -1,18 +1,10 @@
 import { getAllProducts } from "@/_lib/data-service";
-import Card from "./Card";
 import getShuffledProducts from "@/_utils/shuffleProducts";
-import MapProducts from "./MapProducts";
+import FilterableProductGrid from "./FilterableProductGrid";
 
-
-
-export default async function Allproducts() {
+export default async function Allproducts({ title }) {
   const products = (await getAllProducts()) || [];
-  
   const shuffledProducts = getShuffledProducts(products);
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-      <MapProducts products={shuffledProducts} />
-    </div>
-  );
-}
 
+  return <FilterableProductGrid products={shuffledProducts} title={title} />;
+}

@@ -11,6 +11,7 @@ import icon from "../../public/images/icon.png";
 import cart from "../../public/images/cart_icon.png";
 
 import NavLink from "./NavLink";
+import SearchBox from "./SearchBox";
 import { createClient } from "@/_lib/supabase-browser";
 
 const Navbar = () => {
@@ -164,6 +165,9 @@ const Navbar = () => {
 
       {/* Desktop Right Icons + Mobile Hamburger */}
       <div className="flex items-center gap-3">
+        {/* Search */}
+        <SearchBox />
+
         {/* Account Icon (always visible) */}
         <Link
           href={user ? "/account" : "/login"}
@@ -215,6 +219,9 @@ const Navbar = () => {
       {/* Mobile Drawer */}
       {mobileOpen && (
         <div className="absolute top-full left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 md:hidden animate-in slide-in-from-top-2 duration-200">
+          <div className="p-4 border-b border-gray-100">
+            <SearchBox />
+          </div>
           <ul className="flex flex-col p-4 gap-1">
             {[
               { name: "Men", url: "/men" },

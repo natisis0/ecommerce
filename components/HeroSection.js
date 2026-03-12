@@ -8,7 +8,6 @@ export default function HeroSection() {
       <Image
         src={bannerImg}
         alt="bannerImg"
-        quality={90}
         className="rounded-2xl h-48 sm:h-64 md:h-80 lg:h-100 w-full object-cover"
       />
       <div className="absolute inset-0 flex items-center justify-center flex-col text-white px-4 text-center">
