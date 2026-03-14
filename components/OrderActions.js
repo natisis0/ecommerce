@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { deleteOrderAction } from "@/_lib/order-action";
+import { createCheckoutSession } from "@/_lib/payment-action";
 import { toast } from "sonner";
-import { Trash2, CreditCard } from "lucide-react";
+import { Trash2, CreditCard, Loader2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,6 +19,7 @@ import {
 
 export default function OrderActions({ orderId, status, paymentStatus }) {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isPaying, setIsPaying] = useState(false);
 
   // If order is already paid or not pending, don't show actions
   if (status !== "pending" && paymentStatus !== "pending") return null;
@@ -36,11 +38,21 @@ export default function OrderActions({ orderId, status, paymentStatus }) {
     }
   };
 
-  const handlePay = (e) => {
+  const handlePay = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    toast.success("Redirecting to payment gateway...");
-    // Future: router.push(`/checkout/payment/${orderId}`);
+
+    setIsPaying(true);
+    toast.loading("Redirecting to payment gateway...", { id: "payment-toast" });
+
+    const result = await createCheckoutSession(orderId);
+
+    if (result.error) {
+      toast.error(result.error, { id: "payment-toast" });
+      setIsPaying(false);
+    } else if (result.url) {
+      window.location.href = result.url;
+    }
   };
 
   return (
@@ -51,7 +63,7 @@ export default function OrderActions({ orderId, status, paymentStatus }) {
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <button
-            disabled={isDeleting}
+            disabled={isDeleting || isPaying}
             className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-red-600 transition-colors px-3 py-2 rounded-lg hover:bg-red-50"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -82,11 +94,15 @@ export default function OrderActions({ orderId, status, paymentStatus }) {
 
       <button
         onClick={handlePay}
-        disabled={isDeleting}
-        className="flex items-center gap-1.5 text-xs font-bold bg-gray-900 text-white hover:bg-black transition-colors px-4 py-2 rounded-lg"
+        disabled={isDeleting || isPaying}
+        className="flex items-center gap-1.5 text-xs font-bold bg-gray-900 text-white hover:bg-black transition-colors px-4 py-2 rounded-lg disabled:opacity-50"
       >
-        <CreditCard className="w-4 h-4" />
-        Pay Now
+        {isPaying ? (
+          <Loader2 className="w-4 h-4 animate-spin" />
+        ) : (
+          <CreditCard className="w-4 h-4" />
+        )}
+        {isPaying ? "Processing..." : "Pay Now"}
       </button>
     </div>
   );

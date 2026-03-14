@@ -235,3 +235,16 @@ export async function deleteOrder(orderId, userId) {
     throw new Error("Order not found, or it is no longer pending.");
   }
 }
+
+export async function updateOrder(orderId, updates) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("orders")
+    .update(updates)
+    .eq("id", orderId)
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+  return data;
+}
