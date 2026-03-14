@@ -26,7 +26,7 @@ const Navbar = () => {
   }, [dispatch]);
 
   // Merge localStorage cart into DB and sync
-  const mergeAndSyncCart = async (authUser) => {
+  const mergeAndSyncCart = React.useCallback(async (authUser) => {
     try {
       dispatch(storeActions.setSyncing(true));
       // Get localStorage items
@@ -83,7 +83,7 @@ const Navbar = () => {
     } catch (error) {
       console.error("Cart merge/sync failed:", error);
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     const supabase = createClient();
@@ -127,7 +127,7 @@ const Navbar = () => {
     });
 
     return () => subscription.unsubscribe();
-  }, [dispatch]);
+  }, [dispatch, mergeAndSyncCart]);
 
   const cartItems = useSelector((state) => state.cart.items);
   const totalItems = cartItems.reduce(
@@ -166,7 +166,9 @@ const Navbar = () => {
       {/* Desktop Right Icons + Mobile Hamburger */}
       <div className="flex items-center gap-3">
         {/* Search */}
-        <SearchBox />
+        <React.Suspense fallback={<div className="w-9 h-9" />}>
+          <SearchBox />
+        </React.Suspense>
 
         {/* Account Icon (always visible) */}
         <Link
@@ -220,7 +222,9 @@ const Navbar = () => {
       {mobileOpen && (
         <div className="absolute top-full left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 md:hidden animate-in slide-in-from-top-2 duration-200">
           <div className="p-4 border-b border-gray-100">
-            <SearchBox />
+            <React.Suspense fallback={<div className="h-9" />}>
+              <SearchBox />
+            </React.Suspense>
           </div>
           <ul className="flex flex-col p-4 gap-1">
             {[

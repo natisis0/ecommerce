@@ -5,7 +5,9 @@ import { finalizeOrderAction } from "@/_lib/payment-action";
 import Link from "next/link";
 import { CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 
-export default function SuccessPage({ params, searchParams }) {
+import { Suspense } from "react";
+
+function SuccessPageInner({ params, searchParams }) {
   const unwrappedParams = use(params);
   const unwrappedSearchParams = use(searchParams);
   
@@ -16,13 +18,13 @@ export default function SuccessPage({ params, searchParams }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!sessionId) {
-      setStatus("error");
-      setError("Missing session ID");
-      return;
-    }
-
     async function finalize() {
+      if (!sessionId) {
+        setStatus("error");
+        setError("Missing session ID");
+        return;
+      }
+
       const result = await finalizeOrderAction(orderId, sessionId);
       if (result.success) {
         setStatus("success");
@@ -90,5 +92,18 @@ export default function SuccessPage({ params, searchParams }) {
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function SuccessPage(props) {
+  return (
+    <Suspense fallback={
+      <div className="flex flex-col items-center justify-center min-h-[60vh] px-4">
+        <Loader2 className="w-12 h-12 text-gray-400 animate-spin mb-4" />
+        <p className="text-gray-600">Loading payment details...</p>
+      </div>
+    }>
+      <SuccessPageInner {...props} />
+    </Suspense>
   );
 }
