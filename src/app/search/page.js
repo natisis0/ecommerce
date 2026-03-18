@@ -1,5 +1,7 @@
 import { Suspense } from "react";
 import { getAllProducts } from "@/_lib/data-service";
+import { createClient } from "@/_lib/supabase-server";
+import { createEmbedding } from "@/_lib/ai/embedding";
 import Breadcrumb from "../../../components/Breadcrumb";
 import FilterableProductGrid from "../../../components/FilterableProductGrid";
 import { SpinnerCustom } from "@/components/ui/spinner";
@@ -25,21 +27,56 @@ export default async function SearchPage({ searchParams }) {
 }
 
 async function SearchResults({ query }) {
-  const products = (await getAllProducts()) || [];
+  // If no query, show all products
+  if (!query) {
+    const products = (await getAllProducts()) || [];
+    return <FilterableProductGrid products={products} title="All Products" />;
+  }
 
-  const filteredProducts = products.filter((product) => {
-    const searchStr = query.toLowerCase();
-    return (
-      product.name.toLowerCase().includes(searchStr) ||
-      product.category.toLowerCase().includes(searchStr) ||
-      product.gender.toLowerCase().includes(searchStr)
-    );
+  // Semantic search using embeddings
+  const embedding = await createEmbedding(query);
+  const supabase = await createClient();
+
+  const { data: products, error } = await supabase.rpc("match_products", {
+    query_embedding: embedding,
+    match_threshold: 0.5,
+    match_count: 20,
   });
+
+  if (error) {
+    console.error("Semantic search error:", error.message);
+
+    return (
+      <div className="text-center py-16">
+        <h2 className="text-2xl font-semibold mb-2">
+          No results for &quot;{query}&quot;
+        </h2>
+        <p className="text-gray-500">
+          We couldn&apos;t find any products matching your search. Try a
+          different keyword.
+        </p>
+      </div>
+    );
+  }
+
+  if (!products || products.length === 0) {
+    return (
+      <div className="text-center py-16">
+        <h2 className="text-2xl font-semibold mb-2">
+          No results for &quot;{query}&quot;
+        </h2>
+        <p className="text-gray-500">
+          We couldn&apos;t find any products matching your search. Try a
+          different keyword.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <FilterableProductGrid
-      products={filteredProducts}
-      title={query ? `Search results for "${query}"` : "All Products"}
+      products={products}
+      title={`Search results for "${query}"`}
     />
   );
 }

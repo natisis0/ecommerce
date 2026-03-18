@@ -6,6 +6,8 @@ import { SpinnerCustom } from "@/components/ui/spinner";
 export const revalidate = 120;
 
 const Page = () => {
+
+  
   return (
     <div className="container mx-auto px-4 py-8">
       <Breadcrumb />

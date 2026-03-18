@@ -121,9 +121,6 @@ export default async function ProductPage({ params }) {
           {/* Action Buttons */}
           <div className="mt-12 flex flex-col sm:flex-row gap-4">
             <AddToCartButton product={product} variant="full" />
-            <button className="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold py-5 px-8 rounded-2xl transition-all duration-300 hover:-translate-y-1 active:scale-[0.98] border border-blue-100">
-              Buy Now
-            </button>
           </div>
 
           {/* Additional Perks */}
