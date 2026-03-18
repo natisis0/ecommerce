@@ -33,50 +33,43 @@ async function SearchResults({ query }) {
     return <FilterableProductGrid products={products} title="All Products" />;
   }
 
-  // Semantic search using embeddings
-  const embedding = await createEmbedding(query);
-  const supabase = await createClient();
+  try {
+    // Semantic search using embeddings
+    const embedding = await createEmbedding(query);
+    const supabase = await createClient();
 
-  const { data: products, error } = await supabase.rpc("match_products", {
-    query_embedding: embedding,
-    match_threshold: 0.5,
-    match_count: 20,
-  });
+    const { data: products, error } = await supabase.rpc("match_products", {
+      query_embedding: embedding,
+      match_threshold: 0.5,
+      match_count: 20,
+    });
 
-  if (error) {
-    console.error("Semantic search error:", error.message);
+    if (error) {
+      console.error("Semantic search error:", error.message);
+    }
 
-    return (
-      <div className="text-center py-16">
-        <h2 className="text-2xl font-semibold mb-2">
-          No results for &quot;{query}&quot;
-        </h2>
-        <p className="text-gray-500">
-          We couldn&apos;t find any products matching your search. Try a
-          different keyword.
-        </p>
-      </div>
-    );
+    if (!error && products && products.length > 0) {
+      return (
+        <FilterableProductGrid
+          products={products}
+          title={`Search results for "${query}"`}
+        />
+      );
+    }
+  } catch (err) {
+    console.error("Search failed:", err.message);
   }
 
-  if (!products || products.length === 0) {
-    return (
-      <div className="text-center py-16">
-        <h2 className="text-2xl font-semibold mb-2">
-          No results for &quot;{query}&quot;
-        </h2>
-        <p className="text-gray-500">
-          We couldn&apos;t find any products matching your search. Try a
-          different keyword.
-        </p>
-      </div>
-    );
-  }
-
+  // Fallback: no results or error
   return (
-    <FilterableProductGrid
-      products={products}
-      title={`Search results for "${query}"`}
-    />
+    <div className="text-center py-16">
+      <h2 className="text-2xl font-semibold mb-2">
+        No results for &quot;{query}&quot;
+      </h2>
+      <p className="text-gray-500">
+        We couldn&apos;t find any products matching your search. Try a
+        different keyword.
+      </p>
+    </div>
   );
 }
