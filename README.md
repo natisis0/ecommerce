@@ -2,7 +2,7 @@
 
 [![Production URL](https://img.shields.io/badge/Production-Live-green?style=for-the-badge)](https://ecommerce-nu-cyan.vercel.app/)
 
-A high-performance, full-stack E-commerce application built with **Next.js 15**, **Supabase**, and **Stripe Integration**. This project serves as a comprehensive demonstration of modern web development capabilities, including secure authentication, efficient state management, and real-time database interactions.
+A high-performance, full-stack E-commerce application built with **Next.js 15**, **Supabase**, **Stripe**, and **Google Gemini AI**. This project serves as a comprehensive demonstration of modern web development and AI integration capabilities—featuring secure authentication, efficient state management, real-time database interactions, and an intelligent **RAG-based Chatbot** utilizing **Supabase pgvector**.
 
 ---
 
@@ -20,6 +20,8 @@ Check out the live application here: [https://ecommerce-nu-cyan.vercel.app/](htt
 - **📦 Order Management**: View order history, track payment statuses, and re-initiate payments for pending orders.
 - **📱 Fully Responsive Design**: Optimized for desktops, tablets, and mobile devices using **Tailwind CSS**.
 - **🚀 Server-Side Excellence**: Leverages **Next.js Server Actions** for secure backend logic and data mutations.
+- **🤖 Interactive AI Assistant**: A custom-built floating chatbot powered by **Gemini 3**.
+- **🧠 Semantic Search (RAG)**: Integrates Supabase `pgvector` with AI embeddings to provide highly intelligent, context-aware product matching and recommendations.
 
 ---
 
@@ -27,8 +29,9 @@ Check out the live application here: [https://ecommerce-nu-cyan.vercel.app/](htt
 
 - **Frontend**: [Next.js](https://nextjs.org/) (App Router), [React](https://react.dev/), [Redux Toolkit](https://redux-toolkit.js.org/)
 - **Styling**: [Tailwind CSS 4](https://tailwindcss.com/), [Lucide React](https://lucide.dev/) (Icons), [Sonner](https://sonner.stevenly.me/) (Toasts)
-- **Backend & Database**: [Supabase](https://supabase.com/) (PostgreSQL, Auth, Storage)
+- **Backend & Database**: [Supabase](https://supabase.com/) (PostgreSQL, Auth, Storage, `pgvector` extension)
 - **Payments**: [Stripe API](https://stripe.com/)
+- **AI Integration**: [Google Gemini](https://ai.google.dev/) (LLM), RAG Vector Embeddings
 
 ---
 
