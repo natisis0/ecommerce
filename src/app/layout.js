@@ -3,6 +3,7 @@ import Navbar from "../../components/NavBar/Navbar";
 import "./globals.css";
 import Providers from "./Providers";
 import { Toaster } from "@/components/ui/sonner";
+import { Chatbot } from "@/features/chatbot";
 
 export const metadata = {
   title: "Ecommerce",
@@ -18,6 +19,7 @@ export default function RootLayout({ children }) {
           {children}
           <Footers />
           <Toaster />
+          <Chatbot />
         </Providers>
       </body>
     </html>

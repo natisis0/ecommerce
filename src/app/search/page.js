@@ -33,31 +33,37 @@ async function SearchResults({ query }) {
     return <FilterableProductGrid products={products} title="All Products" />;
   }
 
+  let products = null;
+  let searchError = null;
+
   try {
     // Semantic search using embeddings
     const embedding = await createEmbedding(query);
     const supabase = await createClient();
 
-    const { data: products, error } = await supabase.rpc("match_products", {
+    const { data, error } = await supabase.rpc("match_products", {
       query_embedding: embedding,
       match_threshold: 0.5,
       match_count: 20,
     });
 
+    products = data;
+    searchError = error;
+
     if (error) {
       console.error("Semantic search error:", error.message);
     }
-
-    if (!error && products && products.length > 0) {
-      return (
-        <FilterableProductGrid
-          products={products}
-          title={`Search results for "${query}"`}
-        />
-      );
-    }
   } catch (err) {
     console.error("Search failed:", err.message);
+  }
+
+  if (!searchError && products && products.length > 0) {
+    return (
+      <FilterableProductGrid
+        products={products}
+        title={`Search results for "${query}"`}
+      />
+    );
   }
 
   // Fallback: no results or error
