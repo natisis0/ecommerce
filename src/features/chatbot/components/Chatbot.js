@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +40,7 @@ export default function Chatbot() {
 
       if (!res.ok) throw new Error(data.error || "Failed to fetch response");
 
-      setMessages((prev) => [...prev, { role: "ai", text: data.reply }]);
+      setMessages((prev) => [...prev, { role: "ai", text: data.reply, products: data.products }]);
     } catch (error) {
       console.error("Chat error:", error);
       setMessages((prev) => [...prev, { role: "ai", text: "Sorry, I had trouble connecting. Please try again." }]);
@@ -82,6 +84,22 @@ export default function Chatbot() {
                     >
                       {msg.text}
                     </ReactMarkdown>
+                    {msg.products && msg.products.length > 0 && (
+                      <div className="flex flex-col gap-2 mt-2">
+                        <p className="text-xs font-semibold text-gray-500">Recommended for you:</p>
+                        {msg.products.map(product => (
+                          <Link href={`/products/${product.id}`} key={product.id} className="flex gap-3 bg-white border border-gray-100 p-2 rounded-xl hover:shadow-md hover:border-blue-200 transition-all group">
+                            <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-gray-50">
+                              <Image src={product.image} alt={product.name} fill className="object-cover group-hover:scale-105 transition-transform" sizes="56px" />
+                            </div>
+                            <div className="flex flex-col justify-center flex-1 min-w-0">
+                              <span className="text-xs font-bold text-gray-900 truncate">{product.name}</span>
+                              <span className="text-xs text-blue-600 font-bold mt-0.5">${Number(product.price).toFixed(2)}</span>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

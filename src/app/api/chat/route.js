@@ -16,35 +16,26 @@ export async function POST(req) {
 
     const latestMessage = messages[messages.length - 1].text.toLowerCase();
 
-    // Heuristics to check if we should search the database
-    const isProductSearch = latestMessage.includes("buy") || 
-                            latestMessage.includes("looking for") || 
-                            latestMessage.includes("shoes") || 
-                            latestMessage.includes("price") ||
-                            latestMessage.length > 15;
-
     let productContext = "No specific database products requested.";
 
-    // Only search Supabase if we think they want a product
-    if (isProductSearch) {
-      const queryEmbedding = await createEmbedding(latestMessage);
+    // Always search Supabase for context
+    const queryEmbedding = await createEmbedding(latestMessage);
 
-      const { data: matchedProducts, error: dbError } = await supabase.rpc('match_products', {
-        query_embedding: queryEmbedding,
-        match_threshold: 0.5,
-        match_count: 5
+    const { data: matchedProducts, error: dbError } = await supabase.rpc('match_products', {
+      query_embedding: queryEmbedding,
+      match_threshold: 0.5,
+      match_count: 5
+    });
+
+    if (dbError) throw dbError;
+
+    if (matchedProducts && matchedProducts.length > 0) {
+      productContext = "Here are some related products from our database:\n\n";
+      matchedProducts.forEach(product => {
+        productContext += `- ${product.name} (Price: $${product.price})\n  Description: ${product.description}\n\n`;
       });
-
-      if (dbError) throw dbError;
-
-      if (matchedProducts && matchedProducts.length > 0) {
-        productContext = "Here are some related products from our database:\n\n";
-        matchedProducts.forEach(product => {
-          productContext += `- ${product.name} (Price: $${product.price})\n  Description: ${product.description}\n\n`;
-        });
-      } else {
-        productContext = "We couldn't find any exact products matching that description, but try to answer anyway or suggest browsing.";
-      }
+    } else {
+      productContext = "We couldn't find any exact products matching that description, but try to answer anyway or suggest browsing.";
     }
 
     const systemInstruction = `
@@ -52,7 +43,7 @@ export async function POST(req) {
       Your goal is to have natural conversations, help customers find products, and answer support questions.
 
       ABOUT THIS APP (PORTFOLIO PROJECT):
-      This ecommerce application is a portfolio project built to demonstrate advanced full-stack web development abilities and cutting-edge AI integration skills. If a user asks about the app's creation, your capabilities, or the developer, feel free to proudly explain that this project showcases both frontend/backend engineering and AI RAG (Retrieval-Augmented Generation) skills!
+      This ecommerce application is a portfolio project created by Natnael Sisay (natnaesisay4@gmail.com) to demonstrate advanced full-stack web development abilities and cutting-edge AI integration skills. If a user asks about the app's creation, your capabilities, or the developer, feel free to proudly explain that this project showcases both frontend/backend engineering and AI RAG (Retrieval-Augmented Generation) skills!
 
       STORE POLICIES (Use this to answer support questions):
       1. Returns: We accept returns within 30 days of purchase. Items must be unused.
@@ -63,7 +54,7 @@ export async function POST(req) {
       PRODUCT SEARCH RULES:
       Below are products retrieved from our database based on the user's latest message. 
       If the user is looking to buy something, recommend these products naturally. 
-      If the database context says no products were searched, or the user is just saying hello or asking about a policy, just be a helpful chatbot and ignore the products.
+      Only recommend products if they are explicitly listed in the DATABASE CONTEXT. If no products are found, or the user is just saying hello or asking about a policy, DO NOT hallucinate products. Be a friendly assistant and answer directly or suggest browsing if they have a specific need we couldn't match.
 
       DATABASE CONTEXT:
       ${productContext}
@@ -84,7 +75,7 @@ export async function POST(req) {
       }
     });
 
-    return NextResponse.json({ reply: response.text });
+    return NextResponse.json({ reply: response.text , products: matchedProducts});
 
   } catch (error) {
     console.error("API error:", error);
